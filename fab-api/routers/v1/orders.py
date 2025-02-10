@@ -17,8 +17,8 @@ def _get_orders(commons: CommonDeps = Depends(common_deps)):
 def get_order_details(order_id: int, commons: CommonDeps = Depends(common_deps)) -> FABOrderWithItems:
     stmt = (
         select(FABOrder, FABOrderItem, FABItem)
-        .join(FABOrderItem)
-        .join(FABItem)
+        .join(FABOrderItem, FABOrder.pk == FABOrderItem.fk_order)
+        .join(FABItem, FABItem.pk == FABOrderItem.fk_item)
         .where(FABOrder.pk == order_id)
         .where(FABOrder.user_id == commons.user_id)
     )
@@ -33,10 +33,7 @@ def get_order_details(order_id: int, commons: CommonDeps = Depends(common_deps))
         total_price = order.total_price
         items.append(
             FABOrderItemReturn(
-                **order_item.model_dump(),
-                name=item.name,
-                price=item.price,
-                total_price=order_item.quantity * item.price
+                **order_item.model_dump(), name=item.name, price=item.price, total=order_item.quantity * item.price
             )
         )
     return FABOrderWithItems(user_id=user_id, timestamp=timestamp, total_price=total_price, items=items)
@@ -53,8 +50,8 @@ async def get_orders(commons: CommonDeps = Depends(common_deps)) -> List[FABOrde
     return _get_all_orders(commons)
 
 
-@router.get("/deltails")
-async def get_orders_deltails(order_id: int, commons: CommonDeps = Depends(common_deps)):
+@router.get("/details")
+async def get_orders_details(order_id: int, commons: CommonDeps = Depends(common_deps)):
     return get_order_details(order_id, commons)
 
 

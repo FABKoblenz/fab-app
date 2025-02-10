@@ -34,8 +34,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     }
 
     addToCart(item: Item) {
-        console.log(item);
-        this.apiService.addItemToCart(item).subscribe(
+        this.apiService.addItemToCart(item.pk).subscribe(
             () => {
                 this.toastMessage = 'Item wurde erfolgreich dem Korb hinzugefuegt!';
                 this.toastColor = 'success';

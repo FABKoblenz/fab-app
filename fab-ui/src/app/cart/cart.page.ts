@@ -2,8 +2,10 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { IonButton, IonContent, IonFooter, IonIcon, IonItem, IonLabel, IonToast, IonToolbar } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
 import { DecimalPipe } from '@angular/common';
-import { ApiService, CartItem } from '../shared/api.service';
+import { ApiService, CartItem, Order } from '../shared/api.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { __assign } from 'tslib';
 
 @Component({
     selector: 'app-cart',
@@ -17,6 +19,7 @@ export class CartPage implements OnInit, OnDestroy {
     toastColor: string = 'success';
 
     apiService: ApiService = inject(ApiService);
+    router: Router = inject(Router);
     cartItems: CartItem[] = [];
 
     fullTotal = 0;
@@ -26,14 +29,21 @@ export class CartPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.getItems();
+        this.apiService.cartItemsSubject.subscribe((items) => {
+            this.handleCartItems(items);
+        });
     }
 
     getItems() {
-        const sub = this.apiService.getCart().subscribe((data) => {
-            this.cartItems = data;
-            this.fullTotal = this.cartItems.reduce((n, { total }) => n + total, 0);
+        const sub = this.apiService.getCart().subscribe((items) => {
+            this.handleCartItems(items);
         });
         this.subscriptions.push(sub);
+    }
+
+    handleCartItems(items: CartItem[]) {
+        this.cartItems = items;
+        this.fullTotal = this.cartItems.reduce((n, { total }) => n + total, 0);
     }
 
     orderCart() {
@@ -43,6 +53,10 @@ export class CartPage implements OnInit, OnDestroy {
                 this.toastMessage = 'Erfolgreich!';
                 this.toastColor = 'success';
                 this.setToastOpen(true);
+                // Trigger reload of all your orders
+                this.apiService.getOrders().subscribe((data: Order[]) => {
+                    this.router.navigate(['/', 'fab', 'orders']).then(() => {});
+                });
             },
             (err) => {
                 this.toastMessage = err.message;
@@ -51,6 +65,18 @@ export class CartPage implements OnInit, OnDestroy {
             }
         );
         this.subscriptions.push(sub);
+    }
+
+    removeItemFromCart(item: CartItem) {
+        this.apiService.removeItemFromCart(item).subscribe((data) => {
+            this.handleCartItems(data);
+        });
+    }
+
+    decrementItemInCart(item: CartItem) {
+        if (item.quantity > 1) {
+            this.apiService.addItemToCart(item.fk_item, -1).subscribe((_) => {});
+        }
     }
 
     ngOnDestroy() {

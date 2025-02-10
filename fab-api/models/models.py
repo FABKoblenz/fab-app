@@ -48,6 +48,10 @@ class FABOrderBase(SQLModel):
 
 class FABOrder(FABOrderBase, table=True):
     pk: int = Field(default=None, nullable=False, primary_key=True)
+    paid: bool = Field(default=False)
+    invoice_str: str = Field(default=None)
+    invoice_number: str = Field(default=None)
+    invoice_date: datetime = Field(default=None)
 
 
 class FABOrderCreate(FABOrderBase):

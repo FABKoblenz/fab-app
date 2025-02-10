@@ -1,0 +1,25 @@
+.bg-img {
+    background-position: center;
+    background-size: cover;
+    background-image: url('/assets/pool-table-01.jpg');
+    min-height: max(50%, 550px);
+    height: max(50%, 550px);
+}
+.fab-page-title {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.w3-center {
+    text-align: center !important;
+}
+
+.fab-title {
+    color: #005a84;
+}
+
+.fab-page-title-text {
+    font-size: min(6vw, 70px);
+    font-weight: 900;
+}

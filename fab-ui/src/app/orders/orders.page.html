@@ -1,11 +1,32 @@
 <app-header [title]="'Übersicht'"></app-header>
 
 <ion-content [fullscreen]="true">
-    @for (item of items; track item.pk) {
-    <ion-item>
+    <ion-header [translucent]="true">
+        <ion-toolbar>
+            <ion-label slot="start">
+                <h1>Gesamt {{getCurrentMonthName()}}: {{getTotalForCurrentMonth() | number: '1.2-2'}}€</h1>
+            </ion-label>
+        </ion-toolbar>
+    </ion-header>
+
+    @for (order of orders; track order.pk; let idx = $index) {
+    <ion-item (click)="handleClick(idx, order)">
         <ion-label>
-            <h1>{{item.total_price | number: '1.2-2' }}€</h1>
-            <h2>{{getDateFormated(item)}}</h2>
+            <h1>{{order.total_price | number: '1.2-2' }}€</h1>
+            <h2>{{getDateFormated(order)}}</h2>
+            @if (orderDetails[order.pk] && isOrdersOpen[idx]) {
+            <ion-item>
+                <ion-grid>
+                    @for (item of orderDetails[order.pk].items; track item.pk) {
+                    <ion-row>
+                        <ion-col>{{item.name}}</ion-col>
+                        <ion-col>{{item.quantity}} x {{item.price | number: '1.2-2' }}€</ion-col>
+                        <ion-col>Gesamt: {{item.total | number: '1.2-2'}}€</ion-col>
+                    </ion-row>
+                    }
+                </ion-grid>
+            </ion-item>
+            }
         </ion-label>
     </ion-item>
     }

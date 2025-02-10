@@ -8,13 +8,19 @@
             <h2>{{item.quantity}} x {{item.price | number: '1.2-2' }}€</h2>
             <h2>Gesamt: {{item.total | number: '1.2-2'}}€</h2>
         </ion-label>
-        <ion-button size="default">
+        @if (item.quantity <= 1) {
+        <ion-button size="default" (click)="removeItemFromCart(item)">
             <ion-icon name="trash"></ion-icon>
         </ion-button>
+        } @if (item.quantity > 1) {
+        <ion-button size="default" (click)="decrementItemInCart(item)">
+            <ion-icon name="remove"></ion-icon>
+        </ion-button>
+        }
     </ion-item>
     }
 
-    <ion-toast [color]="toastColor" [isOpen]="isToastOpen" [message]="toastMessage" [duration]="5000" (didDismiss)="setToastOpen(false)"></ion-toast>
+    <ion-toast [color]="toastColor" [isOpen]="isToastOpen" [message]="toastMessage" [duration]="1000" (didDismiss)="setToastOpen(false)"></ion-toast>
 </ion-content>
 <ion-footer [translucent]="true">
     <ion-toolbar>
