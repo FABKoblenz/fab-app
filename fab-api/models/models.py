@@ -64,9 +64,16 @@ class FABOrderItem(FABOrderItemBase, table=True):
     pk: int = Field(default=None, nullable=False, primary_key=True)
 
 
+class FABOrderItemReturn(FABOrderItemBase):
+    pk: int
+    name: str
+    price: float
+    total: float
+
+
 class FABOrderItemCreate(FABOrderItemBase):
     pass
 
 
 class FABOrderWithItems(FABOrderBase):
-    items: List[FABOrderItem]
+    items: List[FABOrderItemReturn]

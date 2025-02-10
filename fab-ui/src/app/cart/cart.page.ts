@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { IonButton, IonContent, IonFooter, IonIcon, IonItem, IonLabel, IonTitle, IonToast, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonFooter, IonIcon, IonItem, IonLabel, IonToast, IonToolbar } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
 import { DecimalPipe } from '@angular/common';
 import { ApiService, CartItem } from '../shared/api.service';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
     selector: 'app-cart',
     templateUrl: 'cart.page.html',
     styleUrls: ['cart.page.scss'],
-    imports: [IonContent, HeaderComponent, DecimalPipe, IonButton, IonIcon, IonItem, IonLabel, IonToast, IonFooter, IonToolbar, IonTitle],
+    imports: [IonContent, HeaderComponent, DecimalPipe, IonButton, IonIcon, IonItem, IonLabel, IonToast, IonFooter, IonToolbar],
 })
 export class CartPage implements OnInit, OnDestroy {
     isToastOpen = false;
@@ -37,9 +37,19 @@ export class CartPage implements OnInit, OnDestroy {
     }
 
     orderCart() {
-        const sub = this.apiService.orderCart().subscribe((data) => {
-            this.getItems();
-        });
+        const sub = this.apiService.orderCart().subscribe(
+            (data) => {
+                this.getItems();
+                this.toastMessage = 'Erfolgreich!';
+                this.toastColor = 'success';
+                this.setToastOpen(true);
+            },
+            (err) => {
+                this.toastMessage = err.message;
+                this.toastColor = 'danger';
+                this.setToastOpen(true);
+            }
+        );
         this.subscriptions.push(sub);
     }
 

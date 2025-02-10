@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { forkJoin, map, Observable, switchAll } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface Item {
@@ -19,6 +19,13 @@ export interface CartItem {
     name: string;
     price: number;
     total: number;
+}
+
+export interface Order {
+    pk: number;
+    total_price: number;
+    user_id: string;
+    timestamp: Date;
 }
 
 @Injectable({
@@ -47,5 +54,9 @@ export class ApiService {
 
     orderCart(): Observable<CartItem[]> {
         return this.http.post<CartItem[]>(`${this.apiRoot}/orders/order-cart`, null);
+    }
+
+    getOrders(): Observable<Order[]> {
+        return this.http.get<Order[]>(`${this.apiRoot}/orders/`);
     }
 }

@@ -5,7 +5,7 @@
     <ion-item>
         <ion-label>
             <h1>{{item.name}}</h1>
-            <h2>{{item.quantity}} x {{item.quantity | number: '1.2-2' }}€</h2>
+            <h2>{{item.quantity}} x {{item.price | number: '1.2-2' }}€</h2>
             <h2>Gesamt: {{item.total | number: '1.2-2'}}€</h2>
         </ion-label>
         <ion-button size="default">
@@ -21,6 +21,6 @@
         <ion-label slot="start">
             <h1>Gesamt: {{fullTotal | number: '1.2-2'}}€</h1>
         </ion-label>
-        <ion-button slot="end" (click)="orderCart()">Bestaetigen</ion-button>
+        <ion-button slot="end" (click)="orderCart()">Bestätigen</ion-button>
     </ion-toolbar>
 </ion-footer>
