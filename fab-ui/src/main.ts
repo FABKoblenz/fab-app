@@ -25,7 +25,7 @@ const urlConditionLocal = createInterceptorCondition<IncludeBearerTokenCondition
 });
 
 const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-    urlPattern: /^(https:\/\/fab.cnidarias.net)(\/.*)?$/i,
+    urlPattern: /.*/,
     bearerPrefix: 'Bearer',
 });
 
