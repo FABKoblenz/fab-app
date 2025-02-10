@@ -10,6 +10,8 @@ import uvicorn
 
 from connectors.db import run_migrations
 from routers.v1 import items
+from routers.v1 import cart
+from routers.v1 import orders
 
 logging.basicConfig(level=logging.INFO)
 
@@ -52,6 +54,8 @@ app.add_middleware(
 
 v1_api_router = APIRouter()
 v1_api_router.include_router(items.router, prefix="/items", tags=["items"])
+v1_api_router.include_router(cart.router, prefix="/cart", tags=["cart"])
+v1_api_router.include_router(orders.router, prefix="/orders", tags=["orders"])
 app.include_router(v1_api_router, prefix="/v1")
 
 if __name__ == "__main__":

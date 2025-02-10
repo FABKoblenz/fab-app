@@ -8,7 +8,10 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from models.models import Item
+from models.models import FABItem
+from models.models import FABCartItem
+from models.models import FABOrder
+from models.models import FABOrderItem
 
 
 # this is the Alembic Config object, which provides
