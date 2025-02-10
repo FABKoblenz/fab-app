@@ -271,3 +271,5 @@ packages/react-router/test/build/
 _data/
 
 .env
+
+./docker/compose.override.yml
