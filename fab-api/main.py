@@ -9,6 +9,7 @@ from starlette.middleware.cors import CORSMiddleware
 import uvicorn
 
 from connectors.db import run_migrations
+from routers.v1 import users
 
 logging.basicConfig(level=logging.INFO)
 
@@ -50,6 +51,7 @@ app.add_middleware(
 )
 
 v1_api_router = APIRouter()
+v1_api_router.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(v1_api_router, prefix="/v1")
 
 if __name__ == "__main__":

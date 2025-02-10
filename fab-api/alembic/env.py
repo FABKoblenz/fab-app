@@ -1,3 +1,5 @@
+# ruff: noqa: F401
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -5,6 +7,9 @@ from sqlmodel import SQLModel
 from sqlalchemy import pool
 
 from alembic import context
+
+from models.models import Item
+from models.users import User
 
 
 # this is the Alembic Config object, which provides

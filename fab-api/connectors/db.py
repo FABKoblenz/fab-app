@@ -22,6 +22,6 @@ def run_migrations() -> None:
     command.upgrade(alembic_cfg, "head")
 
 
-def get_session():
+def get_db():
     with Session(engine) as session:
         yield session
