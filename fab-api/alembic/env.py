@@ -9,7 +9,6 @@ from sqlalchemy import pool
 from alembic import context
 
 from models.models import Item
-from models.users import User
 
 
 # this is the Alembic Config object, which provides
