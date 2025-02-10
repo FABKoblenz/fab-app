@@ -42,11 +42,15 @@ def get_order_details(order_id: int, commons: CommonDeps = Depends(common_deps))
     return FABOrderWithItems(user_id=user_id, timestamp=timestamp, total_price=total_price, items=items)
 
 
-@router.get("/")
-async def get_orders(commons: CommonDeps = Depends(common_deps)) -> List[FABOrder]:
+def _get_all_orders(commons: CommonDeps = Depends(common_deps)):
     stmt = select(FABOrder).where(FABOrder.user_id == commons.user_id).order_by(FABOrder.timestamp.desc())
     result = commons.db.exec(stmt)
     return [r for r in result]
+
+
+@router.get("/")
+async def get_orders(commons: CommonDeps = Depends(common_deps)) -> List[FABOrder]:
+    return _get_all_orders(commons)
 
 
 @router.get("/deltails")
@@ -55,7 +59,7 @@ async def get_orders_deltails(order_id: int, commons: CommonDeps = Depends(commo
 
 
 @router.post("/order-cart")
-async def create_order_cart(commons: CommonDeps = Depends(common_deps)) -> FABOrderWithItems:
+async def create_order_cart(commons: CommonDeps = Depends(common_deps)) -> List[FABOrder]:
     stmt = select(FABCartItem).where(FABCartItem.user_id == commons.user_id)
     result = commons.db.exec(stmt)
 
@@ -81,4 +85,4 @@ async def create_order_cart(commons: CommonDeps = Depends(common_deps)) -> FABOr
     commons.db.commit()
     commons.db.refresh(fab_order)
 
-    return get_order_details(fab_order.pk, commons)
+    return _get_all_orders(commons)
