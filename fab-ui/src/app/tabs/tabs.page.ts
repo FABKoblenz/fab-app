@@ -3,6 +3,7 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge } from '@
 import { addIcons } from 'ionicons';
 import { cart, reorderFour, home } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
+import Keycloak from 'keycloak-js';
 
 @Component({
     selector: 'app-tabs',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
     imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, CommonModule],
 })
 export class TabsPage {
+    public keycloak: Keycloak = inject(Keycloak);
     public environmentInjector = inject(EnvironmentInjector);
 
     numberOfItemsInCart = 0;

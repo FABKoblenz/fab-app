@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-export interface Welcome {
-    tax_category: TaxCategory;
+export interface Item {
+    tax_category: string;
     name: string;
     price: number;
     pk: number;
@@ -12,9 +13,12 @@ export interface Welcome {
     providedIn: 'root',
 })
 export class ApiService {
+    apiRoot = '/api/v1';
     http: HttpClient = inject(HttpClient);
 
     constructor() {}
 
-    getItems(): {};
+    getItems(): Observable<Item[]> {
+        return this.http.get<Item[]>(`${this.apiRoot}/items/`);
+    }
 }

@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
         <ion-title> Items </ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="logout()"> Logout </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
@@ -11,7 +14,7 @@
         </ion-toolbar>
     </ion-header>
 
-    hallo @for (item of items; track item.pk) {
+    @for (item of items; track item.pk) {
     <div>{{item.name}}</div>
     }
 </ion-content>
