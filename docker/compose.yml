@@ -23,9 +23,9 @@ services:
   db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: fab
+      POSTGRES_USER: ${PG_DB_UNAME}
+      POSTGRES_PASSWORD: ${PG_DB_PW}
+      POSTGRES_DB: ${PG_DB_DATABASE}
       PGDATA: /var/lib/postgresql/data
     volumes:
       - './_data/postgres:/var/lib/postgresql/data'
@@ -33,6 +33,29 @@ services:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 5s
       retries: 20
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.0
+    container_name: keycloak
+    command: start --proxy-headers forwarded --http-relative-path /auth --db postgres --db-url-host ${PG_DB_HOST} --db-username ${PG_DB_UNAME} --db-password ${PG_DB_PW}
+    environment:
+      KC_DB_URL_HOST: ${PG_DB_HOST}
+      KC_DB_URL_PORT: ${PG_DB_PORT}
+      KC_DB_URL_DATABASE: ${PG_DB_DATABASE}
+      KC_DB_USERNAME: ${PG_DB_UNAME}
+      KC_DB_PASSWORD: ${PG_DB_PW}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: ${FQDN}/auth
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_BOOTSTRAP_ADMIN_USERNAME: "admin"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PW}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`${FQDN}`) && PathPrefix(`/auth`)"
+      - "traefik.http.routers.keycloak.entrypoints=web"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.tls.certresolver=myresolver"
 
   api:
     build:
