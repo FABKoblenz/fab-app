@@ -7,24 +7,31 @@ from sqlalchemy import delete
 from sqlmodel import select
 
 from connectors import common_deps, CommonDeps
-from models.models import FABCartItem, FABItem
+from models.models import FABCartItem, FABItem, FABCartItemReturn
 
 router = APIRouter()
 
 
-def _get_current_cart(commons: CommonDeps) -> List[FABCartItem]:
-    stmt = select(FABCartItem).where(FABCartItem.user_id == commons.user_id)
+def _get_current_cart(commons: CommonDeps) -> List[FABCartItemReturn]:
+    stmt = select(FABCartItem, FABItem).join(FABItem).where(FABCartItem.user_id == commons.user_id)
     result = commons.db.exec(stmt)
-    return [r for r in result]
+    return [
+        FABCartItemReturn(
+            **cart_item.model_dump(), name=item.name, price=item.price, total=item.price * cart_item.quantity
+        )
+        for cart_item, item in result
+    ]
 
 
 @router.get("/")
-def get_cart(commons: CommonDeps = Depends(common_deps)) -> List[FABCartItem]:
+def get_cart(commons: CommonDeps = Depends(common_deps)) -> List[FABCartItemReturn]:
     return _get_current_cart(commons)
 
 
 @router.post("/add-item")
-def add_item_to_cart(item_pk: int, quantity: int = 1, commons: CommonDeps = Depends(common_deps)) -> List[FABCartItem]:
+def add_item_to_cart(
+    item_pk: int, quantity: int = 1, commons: CommonDeps = Depends(common_deps)
+) -> List[FABCartItemReturn]:
     # Ensure that the item exists first
     stmt = select(FABItem).where(FABItem.pk == item_pk)
     fab_item = commons.db.exec(stmt).first()
@@ -53,7 +60,7 @@ def add_item_to_cart(item_pk: int, quantity: int = 1, commons: CommonDeps = Depe
 
 
 @router.delete("/remove-item")
-def remove_item_from_cart(item_pk: int, commons: CommonDeps = Depends(common_deps)) -> List[FABCartItem]:
+def remove_item_from_cart(item_pk: int, commons: CommonDeps = Depends(common_deps)) -> List[FABCartItemReturn]:
     # Ensure that the item exists first
     stmt = delete(FABCartItem).where(FABCartItem.fk_item == item_pk).where(FABCartItem.user_id == commons.user_id)
     commons.db.exec(stmt)

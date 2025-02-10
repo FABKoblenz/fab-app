@@ -12,4 +12,6 @@
         </ion-button>
     </ion-item>
     }
+
+    <ion-toast [color]="toastColor" [isOpen]="isToastOpen" [message]="toastMessage" [duration]="5000" (didDismiss)="setToastOpen(false)"></ion-toast>
 </ion-content>

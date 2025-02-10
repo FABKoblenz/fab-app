@@ -29,6 +29,13 @@ class FABCartItem(FABCartItemBase, table=True):
     pk: int = Field(default=None, nullable=False, primary_key=True)
 
 
+class FABCartItemReturn(FABCartItemBase):
+    pk: int = Field(default=None, nullable=False, primary_key=True)
+    name: str
+    price: float
+    total: float
+
+
 class FABCartItemCreate(FABCartItemBase):
     pass
 
