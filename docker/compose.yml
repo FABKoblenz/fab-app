@@ -35,7 +35,7 @@ services:
       retries: 20
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1.0
+    image: quay.io/keycloak/keycloak:26.1
     container_name: keycloak
     command: start --proxy-headers xforwarded --http-enabled true --hostname https://${FQDN}/auth --http-relative-path /auth --db postgres --db-url-host ${PG_DB_HOST} --db-username ${PG_DB_UNAME} --db-password ${PG_DB_PW}
     environment:
