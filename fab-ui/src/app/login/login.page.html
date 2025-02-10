@@ -11,10 +11,12 @@
         </ion-toolbar>
     </ion-header>
 
-    <ion-col size="6">
-        <ion-button expand="full">
-            Login
-            <ion-icon slot="end" name="star"></ion-icon>
-        </ion-button>
-    </ion-col>
+    <ion-row class="ion-align-items-center">
+        <ion-col size="12">
+            <ion-button expand="full" (click)="login()">
+                Login
+                <ion-icon slot="end" name="star"></ion-icon>
+            </ion-button>
+        </ion-col>
+    </ion-row>
 </ion-content>

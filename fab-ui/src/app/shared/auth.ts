@@ -14,7 +14,7 @@ const isAccessAllowed = async (route: ActivatedRouteSnapshot, _: RouterStateSnap
 
     const requiredRole = route.data['role'];
     if (!requiredRole) {
-        return false;
+        return true;
     }
 
     const hasRequiredRole = (role: string): boolean => Object.values(grantedRoles.resourceRoles).some((roles) => roles.includes(role));

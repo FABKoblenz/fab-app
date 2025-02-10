@@ -5,17 +5,35 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
-import { provideHttpClient } from '@angular/common/http';
-import { AutoRefreshTokenService, provideKeycloak, UserActivityService, withAutoRefreshToken } from 'keycloak-angular';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+    AutoRefreshTokenService,
+    createInterceptorCondition,
+    INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+    IncludeBearerTokenCondition,
+    includeBearerTokenInterceptor,
+    provideKeycloak,
+    UserActivityService,
+    withAutoRefreshToken,
+} from 'keycloak-angular';
 
 defineCustomElements(window);
+
+const urlConditionLocal = createInterceptorCondition<IncludeBearerTokenCondition>({
+    urlPattern: /^(http:\/\/localhost:5000)(\/.*)?$/i,
+    bearerPrefix: 'Bearer',
+});
+
+const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+    urlPattern: /^(https:\/\/fab.cnidarias.net)(\/.*)?$/i,
+    bearerPrefix: 'Bearer',
+});
 
 bootstrapApplication(AppComponent, {
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         provideIonicAngular(),
         provideRouter(routes, withPreloading(PreloadAllModules)),
-        provideHttpClient(),
         provideKeycloak({
             config: {
                 url: 'https://fab.cnidarias.net/auth/',
@@ -34,5 +52,10 @@ bootstrapApplication(AppComponent, {
             ],
             providers: [AutoRefreshTokenService, UserActivityService],
         }),
+        {
+            provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
+            useValue: [urlCondition, urlConditionLocal],
+        },
+        provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     ],
 });

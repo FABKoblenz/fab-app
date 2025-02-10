@@ -1,21 +1,10 @@
 {
-    "/auth/*": {
-        "target": "https://fab.cnidarias.net/auth/",
-        "secure": false,
-        "pathRewrite": {
-            "^/auth": ""
-        },
-        "headers": {},
-        "changeOrigin": true,
-        "logLevel": "debug"
-    },
     "/api/*": {
         "target": "http://localhost:5000/",
         "secure": false,
         "pathRewrite": {
             "^/api": ""
         },
-        "headers": {},
         "changeOrigin": true,
         "logLevel": "debug"
     }

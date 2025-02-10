@@ -1,20 +1,15 @@
-<ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-title> Items </ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="logout()"> Logout </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
-</ion-header>
+<app-header [title]="'Items'"></app-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">Items</ion-title>
-        </ion-toolbar>
-    </ion-header>
-
     @for (item of items; track item.pk) {
-    <div>{{item.name}}</div>
+    <ion-item>
+        <ion-label>
+            <h1>{{item.name}}</h1>
+            <h2>{{item.price | number: '1.2-2' }}€</h2>
+        </ion-label>
+        <ion-button size="default" (click)="addToCart(item)">
+            <ion-icon name="add"></ion-icon>
+        </ion-button>
+    </ion-item>
     }
 </ion-content>

@@ -1,7 +1,7 @@
 import { Component, EnvironmentInjector, inject } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cart, reorderFour, home } from 'ionicons/icons';
+import { cart, reorderFour, home, add, trash, checkmark } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
 import Keycloak from 'keycloak-js';
 
@@ -18,6 +18,6 @@ export class TabsPage {
     numberOfItemsInCart = 0;
 
     constructor() {
-        addIcons({ home, cart, reorderFour });
+        addIcons({ home, cart, reorderFour, add, trash, checkmark });
     }
 }

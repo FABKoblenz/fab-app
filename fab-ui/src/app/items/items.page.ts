@@ -1,18 +1,18 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton } from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel } from '@ionic/angular/standalone';
 import { ApiService, Item } from '../shared/api.service';
 import { Subscription } from 'rxjs';
-import Keycloak from 'keycloak-js';
+import { HeaderComponent } from '../components/header/header.component';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'app-items',
     templateUrl: 'items.page.html',
     styleUrls: ['items.page.scss'],
-    imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton],
+    imports: [IonContent, HeaderComponent, IonItem, IonLabel, DecimalPipe, IonButton, IonIcon],
 })
 export class ItemsPage implements OnInit, OnDestroy {
     apiService: ApiService = inject(ApiService);
-    keycloak: Keycloak = inject(Keycloak);
     items: Item[] = [];
 
     subscriptions: Subscription[] = [];
@@ -29,9 +29,8 @@ export class ItemsPage implements OnInit, OnDestroy {
         this.subscriptions.push(sub);
     }
 
-    logout() {
-        this.keycloak.logout().then(() => {});
-        console.log('Logout');
+    addToCart(item: Item) {
+        console.log(item);
     }
 
     ngOnDestroy() {

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
+import { HeaderComponent } from '../components/header/header.component';
 
 @Component({
     selector: 'app-orders',
     templateUrl: 'orders.page.html',
     styleUrls: ['orders.page.scss'],
-    imports: [IonHeader, IonToolbar, IonTitle, IonContent],
+    imports: [IonContent, HeaderComponent],
 })
 export class OrdersPage {
     constructor() {}
