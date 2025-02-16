@@ -23,9 +23,11 @@ export class TabsPage implements OnInit {
     }
 
     ngOnInit() {
-        this.apiService.getCart().subscribe((data: CartItem[]) => {
-            this.updateCartItemCounter(data);
-        });
+        if (this.keycloak.authenticated) {
+            this.apiService.getCart().subscribe((data: CartItem[]) => {
+                this.updateCartItemCounter(data);
+            });
+        }
         this.apiService.cartItemsSubject.subscribe((items: CartItem[]) => {
             this.updateCartItemCounter(items);
         });

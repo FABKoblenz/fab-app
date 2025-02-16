@@ -31,6 +31,11 @@ const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
     bearerPrefix: 'Bearer',
 });
 
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    (window as any).FAB_INSTALL_PROMPT = e;
+});
+
 bootstrapApplication(AppComponent, {
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

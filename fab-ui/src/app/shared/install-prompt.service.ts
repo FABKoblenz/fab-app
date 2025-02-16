@@ -5,13 +5,21 @@ import { Injectable } from '@angular/core';
 })
 export class InstallPromptService {
     public deferredPrompt: any;
-    public showInstallButton: boolean = false;
+    private _showInstallButton: boolean = false;
 
     constructor() {}
 
     setDeferredPrompt(e: any) {
         this.deferredPrompt = e;
-        this.showInstallButton = true;
+        this._showInstallButton = true;
+    }
+
+    showInstallButton() {
+        if ((window as any).FAB_INSTALL_PROMPT) {
+            this.deferredPrompt = (window as any).FAB_INSTALL_PROMPT;
+            this._showInstallButton = true;
+        }
+        return this._showInstallButton;
     }
 
     openInstallPrompt() {
@@ -21,8 +29,9 @@ export class InstallPromptService {
         this.deferredPrompt.prompt();
         this.deferredPrompt.userChoice.then((choiceResult: any) => {
             if (choiceResult.outcome === 'accepted') {
-                this.showInstallButton = false;
+                this._showInstallButton = false;
                 this.deferredPrompt = null;
+                (window as any).FAB_INSTALL_PROMPT = null;
             }
         });
     }
