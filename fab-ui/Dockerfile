@@ -1,6 +1,7 @@
 ### STAGE 1: Get node modules
 FROM node:22 AS deps
 
+
 WORKDIR /app
 
 COPY package.json ./package-lock.json ./
@@ -21,6 +22,9 @@ RUN npm run ng build
 
 ### STAGE 3: Serve
 FROM nginx:alpine
+LABEL org.opencontainers.image.source=https://github.com/FABKoblenz/fab-app
+LABEL org.opencontainers.image.description="Container Image for the Billard Team FAB Koblenz e.V. Frontend"
+LABEL org.opencontainers.image.licenses=MIT
 
 ## From ‘builder’ stage copy over the artifacts in dist folder to default nginx public folder
 COPY --from=builder /ng-app/www/browser /usr/share/nginx/html
