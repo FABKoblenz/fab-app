@@ -1,11 +1,10 @@
-import { Component, EnvironmentInjector, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { cart, reorderFour, home, add, trash, checkmark, remove } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
 import Keycloak from 'keycloak-js';
 import { ApiService, CartItem } from '../shared/api.service';
-import { ItemsPage } from '../items/items.page';
 
 @Component({
     selector: 'app-tabs',
@@ -15,7 +14,6 @@ import { ItemsPage } from '../items/items.page';
 })
 export class TabsPage implements OnInit {
     public keycloak: Keycloak = inject(Keycloak);
-    public environmentInjector = inject(EnvironmentInjector);
     public apiService: ApiService = inject(ApiService);
 
     numberOfItemsInCart = 0;

@@ -25,6 +25,10 @@ export class LoginPage implements OnInit {
             this.deferredPrompt = e;
             this.showInstallButton = true;
         });
+
+        if (this.keycloak.authenticated) {
+            this.router.navigate(['/fab/items']).then();
+        }
     }
 
     openInstallPrompt() {
