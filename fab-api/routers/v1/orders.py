@@ -76,7 +76,9 @@ async def create_order_cart(commons: CommonDeps = Depends(common_deps)) -> List[
     commons.db.refresh(fab_order)
 
     for item in all_cart_items:
-        fab_order_item = FABOrderItem(fk_order=fab_order.pk, fk_item=item.fk_item, quantity=item.quantity)
+        fab_order_item = FABOrderItem(
+            fk_order=fab_order.pk, fk_item=item.fk_item, quantity=item.quantity, cart_timestamp=item.timestamp
+        )
         commons.db.add(fab_order_item)
         commons.db.delete(item)
     commons.db.commit()
