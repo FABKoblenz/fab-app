@@ -49,9 +49,6 @@ class FABOrderBase(SQLModel):
 class FABOrder(FABOrderBase, table=True):
     pk: int = Field(default=None, nullable=False, primary_key=True)
     paid: bool = Field(default=False)
-    invoice_str: str = Field(default=None)
-    invoice_number: str = Field(default=None)
-    invoice_date: datetime = Field(default=None)
 
 
 class FABOrderCreate(FABOrderBase):
@@ -62,6 +59,7 @@ class FABOrderItemBase(SQLModel):
     fk_order: int = Field(default=None, foreign_key="faborder.pk")
     fk_item: int = Field(default=None, foreign_key="fabitem.pk")
     quantity: int
+    cart_timestamp: datetime
 
 
 class FABOrderItem(FABOrderItemBase, table=True):
