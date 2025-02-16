@@ -37,7 +37,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:26.1
     container_name: keycloak
-    command: start --proxy-headers xforwarded --http-enabled true --hostname https://${FQDN}/auth --http-relative-path /auth --db postgres --db-url-host ${PG_DB_HOST} --db-username ${PG_DB_UNAME} --db-password ${PG_DB_PW}
+    command: start --proxy-headers xforwarded --http-enabled true --hostname https://auth.${FQDN}/auth --http-relative-path /auth --db postgres --db-url-host ${PG_DB_HOST} --db-username ${PG_DB_UNAME} --db-password ${PG_DB_PW}
     environment:
       KC_DB_URL_HOST: ${PG_DB_HOST}
       KC_DB_URL_PORT: ${PG_DB_PORT}
@@ -45,13 +45,13 @@ services:
       KC_DB_USERNAME: ${PG_DB_UNAME}
       KC_DB_PASSWORD: ${PG_DB_PW}
       KC_HTTP_ENABLED: "true"
-      KC_HOSTNAME: https://${FQDN}/auth
+      KC_HOSTNAME: https://auth.${FQDN}/auth
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_BOOTSTRAP_ADMIN_USERNAME: "admin"
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PW}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${FQDN}`) && PathPrefix(`/auth`)"
+      - "traefik.http.routers.keycloak.rule=Host(`auth.${FQDN}`) && PathPrefix(`/auth`)"
       - "traefik.http.routers.keycloak.entrypoints=web"
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
       - "traefik.http.routers.keycloak.entrypoints=websecure"
@@ -64,9 +64,10 @@ services:
     environment:
       API_ROOT_PATH: "/api"
       DATABASE_URL: "postgresql+psycopg2://${PG_DB_UNAME}:${PG_DB_PW}@db:5432/${PG_DB_DATABASE}"
+      KEYCLOAK_URL: "https://auth.fab.cnidarias.net/auth"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`${FQDN}`) && PathPrefix(`/api/`)"
+      - "traefik.http.routers.api.rule=Host(`api.${FQDN}`) && PathPrefix(`/api/`)"
       - "traefik.http.routers.api.entrypoints=web"
       - "traefik.http.routers.api.middlewares=api-stripprefix"
       - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
