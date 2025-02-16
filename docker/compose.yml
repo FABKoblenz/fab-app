@@ -58,6 +58,7 @@ services:
       - "traefik.http.routers.keycloak.tls.certresolver=myresolver"
 
   api:
+    image: ghcr.io/fabkoblenz/fab-app-api:${RELEASE}
     build:
       context: ../fab-api
     container_name: api
@@ -76,9 +77,10 @@ services:
       - "traefik.http.routers.api.tls.certresolver=myresolver"
 
   frontend:
-    container_name: frontend
+    image: ghcr.io/fabkoblenz/fab-app-ui:${RELEASE}
     build:
       context: ../fab-ui
+    container_name: frontend
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`${FQDN}`)"
