@@ -5,7 +5,7 @@
     "homepage": "cnidarias.net",
     "scripts": {
         "ng": "ng",
-        "start": "ng serve --configuration development --proxy-config proxy.conf.json --host 0.0.0.0 ",
+        "start": "ng serve --configuration development --proxy-config proxy.conf.json --host 0.0.0.0 --no-hmr",
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
@@ -21,6 +21,7 @@
         "@angular/platform-browser": "^19.0.0",
         "@angular/platform-browser-dynamic": "^19.0.0",
         "@angular/router": "^19.0.0",
+        "@angular/service-worker": "^19.0.0",
         "@capacitor/app": "6.0.2",
         "@capacitor/core": "6.2.0",
         "@capacitor/haptics": "6.0.2",
@@ -63,5 +64,5 @@
         "karma-jasmine-html-reporter": "~2.1.0",
         "typescript": "~5.6.3"
     },
-    "description": "An Ionic project"
+    "description": "An application for Billard Team FAB Koblenz e.V. to manage their purchases and sales."
 }

@@ -17,6 +17,5 @@ export class HeaderComponent {
 
     logout() {
         this.keycloak.logout().then(() => {});
-        console.log('Logout');
     }
 }

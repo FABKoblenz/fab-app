@@ -1,44 +1,15 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import {
-    IonButton,
-    IonCol,
-    IonContent,
-    IonFooter,
-    IonGrid,
-    IonHeader,
-    IonIcon,
-    IonItem,
-    IonLabel,
-    IonList,
-    IonRow,
-    IonToolbar,
-} from '@ionic/angular/standalone';
+import { IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonRow, IonToolbar } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
-import { ApiService, CartItem, Order, OrderDetails } from '../shared/api.service';
+import { ApiService, Order, OrderDetails } from '../shared/api.service';
 import { Subscription } from 'rxjs';
 import { DecimalPipe } from '@angular/common';
-import { __assign } from 'tslib';
 
 @Component({
     selector: 'app-orders',
     templateUrl: 'orders.page.html',
     styleUrls: ['orders.page.scss'],
-    imports: [
-        IonContent,
-        HeaderComponent,
-        DecimalPipe,
-        IonButton,
-        IonIcon,
-        IonItem,
-        IonLabel,
-        IonList,
-        IonGrid,
-        IonRow,
-        IonCol,
-        IonFooter,
-        IonToolbar,
-        IonHeader,
-    ],
+    imports: [IonContent, HeaderComponent, DecimalPipe, IonItem, IonLabel, IonGrid, IonRow, IonCol, IonToolbar, IonHeader],
 })
 export class OrdersPage implements OnInit, OnDestroy {
     apiService: ApiService = inject(ApiService);

@@ -16,6 +16,8 @@ import {
     UserActivityService,
     withAutoRefreshToken,
 } from 'keycloak-angular';
+import { isDevMode } from '@angular/core';
+import { provideServiceWorker } from '@angular/service-worker';
 
 defineCustomElements(window);
 
@@ -42,7 +44,7 @@ bootstrapApplication(AppComponent, {
             },
             initOptions: {
                 onLoad: 'check-sso',
-                silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+                silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
             },
             features: [
                 withAutoRefreshToken({
@@ -57,5 +59,9 @@ bootstrapApplication(AppComponent, {
             useValue: [urlCondition, urlConditionLocal],
         },
         provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
+        provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000',
+        }),
     ],
 });

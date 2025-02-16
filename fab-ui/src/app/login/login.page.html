@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
         <ion-title>Login</ion-title>
+        @if (showInstallButton) {
+        <ion-label slot="end" style="padding-right: 20px">
+            <ion-button (click)="openInstallPrompt()">Install</ion-button>
+        </ion-label>
+        }
     </ion-toolbar>
 </ion-header>
 
@@ -10,7 +15,7 @@
             <ion-col size="12">
                 <div class="w3-display-middle w3-center fab-page-title">
                     <div id="image" style="display: inline">
-                        <img src="/assets/fab-logo.png" />
+                        <img ngSrc="/img/fab-logo.png" priority alt="FAB Team Logo" height="150" width="150" />
                     </div>
                     <div id="texts" style="">
                         <span class="fab-title fab-page-title-text" style="">Billard Team FAB Koblenz e.V.</span>

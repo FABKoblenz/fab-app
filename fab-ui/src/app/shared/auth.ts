@@ -5,8 +5,6 @@ import { AuthGuardData, createAuthGuard } from 'keycloak-angular';
 const isAccessAllowed = async (route: ActivatedRouteSnapshot, _: RouterStateSnapshot, authData: AuthGuardData): Promise<boolean | UrlTree> => {
     const { authenticated, grantedRoles } = authData;
 
-    console.log('authenticated', authenticated);
-
     const router = inject(Router);
     if (!authenticated) {
         return router.parseUrl('/fab/login');
