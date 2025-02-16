@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    baseUrl: '/api/v1',
+    baseUrl: 'https://api.fab.cnidarias.net/api/v1',
 };

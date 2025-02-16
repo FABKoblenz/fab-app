@@ -38,7 +38,7 @@ bootstrapApplication(AppComponent, {
         provideRouter(routes, withPreloading(PreloadAllModules)),
         provideKeycloak({
             config: {
-                url: 'https://fab.cnidarias.net/auth/',
+                url: 'https://auth.fab.cnidarias.net/auth/',
                 realm: 'fab',
                 clientId: 'pweb',
             },
