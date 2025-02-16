@@ -61,7 +61,7 @@ bootstrapApplication(AppComponent, {
         provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
         provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000',
+            registrationStrategy: 'registerWithDelay:1000',
         }),
     ],
 });
