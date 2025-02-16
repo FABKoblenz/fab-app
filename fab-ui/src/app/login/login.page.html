@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
         <ion-title>Login</ion-title>
-        @if (showInstallButton) {
+        @if (installPromptService.showInstallButton) {
         <ion-label slot="end" style="padding-right: 20px">
-            <ion-button (click)="openInstallPrompt()">Install</ion-button>
+            <ion-button (click)="installPromptService.openInstallPrompt()">Install</ion-button>
         </ion-label>
         }
     </ion-toolbar>

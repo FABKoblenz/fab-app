@@ -3,6 +3,7 @@ import { IonButton, IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonRow, Io
 import Keycloak from 'keycloak-js';
 import { Router } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
+import { InstallPromptService } from '../shared/install-prompt.service';
 
 @Component({
     selector: 'app-login',
@@ -13,35 +14,14 @@ import { NgOptimizedImage } from '@angular/common';
 export class LoginPage implements OnInit {
     keycloak: Keycloak = inject(Keycloak);
     router: Router = inject(Router);
-
-    deferredPrompt: any;
-    showInstallButton: boolean = false;
+    installPromptService: InstallPromptService = inject(InstallPromptService);
 
     constructor() {}
 
     ngOnInit() {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            this.deferredPrompt = e;
-            this.showInstallButton = true;
-        });
-
         if (this.keycloak.authenticated) {
             this.router.navigate(['/fab/items']).then();
         }
-    }
-
-    openInstallPrompt() {
-        if (!this.deferredPrompt) {
-            return;
-        }
-        this.deferredPrompt.prompt();
-        this.deferredPrompt.userChoice.then((choiceResult: any) => {
-            if (choiceResult.outcome === 'accepted') {
-                this.showInstallButton = false;
-                this.deferredPrompt = null;
-            }
-        });
     }
 
     login() {
