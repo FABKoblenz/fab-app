@@ -27,11 +27,11 @@ jobs:
 
           - name: 'Build FAB API Image'
             run: |
-              docker build fab-api --tag ghcr.io/FABKoblenz/fab-app-api:$BRANCH_NAME
-              docker push ghcr.io/FABKoblenz/fab-app-api:$BRANCH_NAME
+              docker build fab-api --tag ghcr.io/fabkoblenz/fab-app-api:$BRANCH_NAME
+              docker push ghcr.io/fabkoblenz/fab-app-api:$BRANCH_NAME
               
           - name: 'Build FAB Frontend Image'
             run: |
-              docker build fab-ui --tag ghcr.io/FABKoblenz/fab-app-ui:$BRANCH_NAME
-              docker push ghcr.io/FABKoblenz/fab-app-ui:$BRANCH_NAME
+              docker build fab-ui --tag ghcr.io/fabkoblenz/fab-app-ui:$BRANCH_NAME
+              docker push ghcr.io/fabkoblenz/fab-app-ui:$BRANCH_NAME
 
