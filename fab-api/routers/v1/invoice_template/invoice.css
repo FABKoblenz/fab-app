@@ -1,0 +1,137 @@
+@font-face {
+    font-family: Source Sans Pro;
+    font-weight: 400;
+    src: url(sourcesanspro-regular.otf);
+}
+@font-face {
+    font-family: Source Sans Pro;
+    font-weight: 700;
+    src: url(sourcesanspro-bold.otf);
+}
+
+@page {
+    font-family: Source Sans Pro;
+    margin: 2.5cm;
+    @bottom-left {
+        color: #a9a;
+        content: 'Billard Team FAB Koblenz e.V. | Carl-Zeiss-Straße 2, 56070 Koblenz | billardteam-fab.de \a BANK_NAME | BIC GENODE | IBAN DE68500105178297336485 \a USt-IdNr. DE123456789 │ Steuer-Nr. 07777/33211 │ Registergericht Musterstadt │ HRB 3333 │ 1. Vorsitzender: Elmar Oberlinger';
+        font-size: 6pt;
+        white-space: pre;
+    }
+    @bottom-right-corner {
+        color: #a9a;
+        font-size: 6pt;
+        content: 'Seite ' counter(page) '/' counter(pages);
+    }
+}
+
+@page:first {
+    margin-top: 1cm;
+}
+
+html {
+    color: #14213d;
+    font-family: Source Sans Pro;
+    font-size: 11pt;
+    line-height: 1.2;
+}
+body {
+    margin: 0;
+}
+
+h1 {
+    color: #005a84;
+    font-size: 20pt;
+    margin: 0;
+    padding-top: 0.3cm;
+    padding-bottom: 1cm;
+}
+
+aside {
+    display: flex;
+    margin: 2em 0 4em;
+}
+aside address {
+    font-style: normal;
+    white-space: pre-line;
+}
+aside address#from {
+    /*color: #a9a;*/
+    flex: 1;
+}
+aside address#to {
+    text-align: right;
+    font-size: 8pt;
+}
+
+dl {
+    position: relative;
+    left: 0;
+    text-align: left;
+    top: 0;
+}
+
+dt,
+dd {
+    display: inline;
+    margin: 0;
+}
+dt {
+    /*color: #a9a;*/
+}
+dt::before {
+    content: '';
+    display: block;
+}
+dt::after {
+    content: ':';
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    border-bottom: 0.2mm solid #a9a;
+    font-size: 8pt;
+    font-weight: 400;
+    padding-bottom: 0.25cm;
+    text-transform: uppercase;
+}
+
+tr.sep {
+    border-top: 0.2mm solid #a9a;
+}
+
+td {
+    padding-top: 1mm;
+}
+td:last-of-type {
+    color: #005a84;
+    font-weight: bold;
+    text-align: right;
+}
+th,
+td {
+    text-align: center;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    text-align: left;
+}
+
+th:first-of-type,
+td:first-of-type {
+    text-align: left;
+}
+th:last-of-type,
+td:last-of-type {
+    text-align: right;
+}
+
+#sep {
+    width: 95%;
+    margin: 0 auto;
+}
