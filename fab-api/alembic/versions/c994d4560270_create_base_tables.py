@@ -1,10 +1,11 @@
 """Create Base Tables
 
 Revision ID: c994d4560270
-Revises: 
+Revises:
 Create Date: 2025-01-24 22:13:55.505667
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op

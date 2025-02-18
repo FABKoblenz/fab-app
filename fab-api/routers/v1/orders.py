@@ -33,7 +33,11 @@ def get_order_details(order_id: int, commons: CommonDeps = Depends(common_deps))
         total_price = order.total_price
         items.append(
             FABOrderItemReturn(
-                **order_item.model_dump(), name=item.name, price=item.price, total=order_item.quantity * item.price
+                **order_item.model_dump(),
+                name=item.name,
+                price=item.price,
+                total=order_item.quantity * item.price,
+                tax_rate=item.tax_rate
             )
         )
     return FABOrderWithItems(user_id=user_id, timestamp=timestamp, total_price=total_price, items=items)

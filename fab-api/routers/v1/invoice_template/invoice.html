@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="invoice.css" media="print" rel="stylesheet" />
+        <link href="invoice.css" rel="stylesheet" />
+        <title>Rechnung</title>
+        <meta name="description" content="InvoiceFABKoblenz" />
+    </head>
+
+    <body>
+        <img src="fab-logo.svg" width="100" height="100" alt="FAB Logo" style="position: absolute; right: 0; top: 0" />
+        <h1>Billard Team FAB Koblenz e.V.<br />Rechnung</h1>
+        <aside>
+            <address id="from">
+                <span>An</span>
+                <span>{{user.first_name}} {{user.last_name}}</span>
+                <span>{{user.street}}</span>
+                <span>{{user.zip}} {{user.city}}</span>
+            </address>
+
+            <address id="to">
+                <span>Billard Team FAB Koblenz e.V.</span>
+                <span>Carl-Zeiss-Straße 2</span>
+                <span>56070 Koblenz</span>
+                <span></span>
+                <span></span>
+                <span>Steuernummer: 123</span>
+                <span>USt-IdNr.: 123123123</span>
+            </address>
+        </aside>
+
+        <dl id="informations">
+            <dt>Rechnungs-Nr.</dt>
+            <dd>{{invoice_number}}</dd>
+            <dt>Datum</dt>
+            <dd>{{invoice_date}}</dd>
+        </dl>
+        <table>
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Bezeichnung</th>
+                    <th>Menge</th>
+                    <th>Einzel Preis</th>
+                    <th>Steuerart</th>
+                    <th>Gesamt</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in all_orders %} {% set outer_loop = loop %} {% for item in order.items %} {% if not outer_loop.first and loop.first %}
+                <tr class="sep">
+                    {% else %}
+                </tr>
+
+                <tr>
+                    {% endif %} {% if loop.first %}
+                    <td>{{order.timestamp.strftime('%d.%m.%Y')}}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    <td>{{item.name}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{ "%.2f" | format(item.price)}}€</td>
+                    <td>USt {{item.tax_rate}}%</td>
+                    <td>{{ "%.2f" | format(item.total)}}€</td>
+                </tr>
+                {% endfor %} {% endfor %}
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <hr id="sep" />
+        <table>
+            <thead></thead>
+            <tbody>
+                {% for tax_rate, tax_total in tax_rate_totals.items() %}
+                <tr>
+                    <td>Umsatzsteuer {{tax_rate}}%</td>
+                    <td>{{ "%.2f" | format(tax_total) }}€</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td><b>Gesamtbetrag</b></td>
+                    <td>{{ "%.2f" | format(total) }}€</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
