@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from sqlmodel import SQLModel, Field
 
@@ -8,6 +8,7 @@ class FABItemBase(SQLModel):
     name: str
     price: float
     tax_category: str
+    tax_rate: int
 
 
 class FABItem(FABItemBase, table=True):
@@ -49,6 +50,7 @@ class FABOrderBase(SQLModel):
 class FABOrder(FABOrderBase, table=True):
     pk: int = Field(default=None, nullable=False, primary_key=True)
     paid: bool = Field(default=False)
+    fk_invoice: Optional[int] = Field(default=None, foreign_key="fabinvoice.pk", nullable=True)
 
 
 class FABOrderCreate(FABOrderBase):
@@ -71,6 +73,7 @@ class FABOrderItemReturn(FABOrderItemBase):
     name: str
     price: float
     total: float
+    tax_rate: int
 
 
 class FABOrderItemCreate(FABOrderItemBase):
@@ -79,3 +82,26 @@ class FABOrderItemCreate(FABOrderItemBase):
 
 class FABOrderWithItems(FABOrderBase):
     items: List[FABOrderItemReturn]
+
+
+class FABInvoiceBase(SQLModel):
+    invoice_number: int
+    invoice_date: datetime
+    invoice_html: str
+
+
+class FABInvoice(FABInvoiceBase, table=True):
+    pk: int = Field(default=None, nullable=False, primary_key=True)
+
+
+class FABUserInfoBase(SQLModel):
+    user_id: str
+    first_name: str
+    last_name: str
+    street: str
+    zip: str
+    city: str
+
+
+class FABUserInfo(FABUserInfoBase, table=True):
+    pk: int = Field(default=None, nullable=False, primary_key=True)

@@ -12,6 +12,7 @@ from connectors.db import run_migrations
 from routers.v1 import items
 from routers.v1 import cart
 from routers.v1 import orders
+from routers.v1 import invoices
 
 logging.basicConfig(level=logging.INFO)
 
@@ -56,6 +57,8 @@ v1_api_router = APIRouter()
 v1_api_router.include_router(items.router, prefix="/items", tags=["items"])
 v1_api_router.include_router(cart.router, prefix="/cart", tags=["cart"])
 v1_api_router.include_router(orders.router, prefix="/orders", tags=["orders"])
+
+v1_api_router.include_router(invoices.router, prefix="/invoices", tags=["invoices"])
 app.include_router(v1_api_router, prefix="/v1")
 
 if __name__ == "__main__":
