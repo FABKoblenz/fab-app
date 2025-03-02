@@ -1,21 +1,24 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonRow, IonToolbar } from '@ionic/angular/standalone';
+import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonRow } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../components/header/header.component';
-import { ApiService, Order, OrderDetails } from '../shared/api.service';
+import { ApiService, Invoice, Order, OrderDetails } from '../shared/api.service';
 import { Subscription } from 'rxjs';
 import { DecimalPipe } from '@angular/common';
+import { download } from 'ionicons/icons';
 
 @Component({
     selector: 'app-orders',
     templateUrl: 'orders.page.html',
     styleUrls: ['orders.page.scss'],
-    imports: [IonContent, HeaderComponent, DecimalPipe, IonItem, IonLabel, IonGrid, IonRow, IonCol, IonToolbar, IonHeader],
+    imports: [IonContent, HeaderComponent, DecimalPipe, IonItem, IonLabel, IonGrid, IonRow, IonCol, IonItemDivider, IonButton, IonIcon, IonList, IonItemGroup],
 })
 export class OrdersPage implements OnInit, OnDestroy {
     apiService: ApiService = inject(ApiService);
     orders: Order[] = [];
     orderDetails: { [pk: number]: OrderDetails } = {};
     isOrdersOpen: boolean[] = [];
+
+    invoices: Invoice[] = [];
 
     subscriptions: Subscription[] = [];
 
@@ -26,6 +29,9 @@ export class OrdersPage implements OnInit, OnDestroy {
         this.apiService.orderItemsSubject.subscribe((orders: Order[]) => {
             this.handleOrders(orders);
         });
+        this.apiService.invoiceItemsSubject.subscribe((invoices: Invoice[]) => {
+            this.handleInvoices(invoices);
+        });
     }
 
     getItems() {
@@ -33,6 +39,10 @@ export class OrdersPage implements OnInit, OnDestroy {
             this.handleOrders(orders);
         });
         this.subscriptions.push(sub);
+        const invoiceSub = this.apiService.getInvoices().subscribe((invoices: Invoice[]) => {
+            this.handleInvoices(invoices);
+        });
+        this.subscriptions.push(invoiceSub);
     }
 
     handleClick(index: number, order: Order) {
@@ -55,6 +65,10 @@ export class OrdersPage implements OnInit, OnDestroy {
     handleOrders(orders: Order[]) {
         this.orders = orders;
         this.isOrdersOpen = this.orders.map((_) => false);
+    }
+
+    handleInvoices(invoices: Invoice[]) {
+        this.invoices = invoices;
     }
 
     getDateFormated(order: Order) {
@@ -83,4 +97,17 @@ export class OrdersPage implements OnInit, OnDestroy {
         }
         return total;
     }
+
+    getInvoiceDate(invoice: Invoice): string {
+        return new Date(invoice.invoice_date).toLocaleString(undefined, { year: 'numeric', month: '2-digit', day: '2-digit' });
+    }
+
+    downloadInvoice(invoice: Invoice) {
+        this.apiService.downloadInvoice(invoice).subscribe((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+        });
+    }
+
+    protected readonly download = download;
 }

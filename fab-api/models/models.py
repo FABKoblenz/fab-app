@@ -85,9 +85,12 @@ class FABOrderWithItems(FABOrderBase):
 
 
 class FABInvoiceBase(SQLModel):
+    user_id: str
     invoice_number: int
     invoice_date: datetime
     invoice_html: str
+    paid: bool
+    total: float
 
 
 class FABInvoice(FABInvoiceBase, table=True):

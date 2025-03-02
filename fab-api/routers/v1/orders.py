@@ -43,15 +43,20 @@ def get_order_details(order_id: int, commons: CommonDeps = Depends(common_deps))
     return FABOrderWithItems(user_id=user_id, timestamp=timestamp, total_price=total_price, items=items)
 
 
-def _get_all_orders(commons: CommonDeps = Depends(common_deps)):
-    stmt = select(FABOrder).where(FABOrder.user_id == commons.user_id).order_by(FABOrder.timestamp.desc())
+def _get_all_orders_without_invoice(commons: CommonDeps = Depends(common_deps)):
+    stmt = (
+        select(FABOrder)
+        .where(FABOrder.user_id == commons.user_id)
+        .where(FABOrder.fk_invoice == None)  # noqa
+        .order_by(FABOrder.timestamp.desc())
+    )
     result = commons.db.exec(stmt)
     return [r for r in result]
 
 
 @router.get("/")
 async def get_orders(commons: CommonDeps = Depends(common_deps)) -> List[FABOrder]:
-    return _get_all_orders(commons)
+    return _get_all_orders_without_invoice(commons)
 
 
 @router.get("/details")
@@ -88,4 +93,4 @@ async def create_order_cart(commons: CommonDeps = Depends(common_deps)) -> List[
     commons.db.commit()
     commons.db.refresh(fab_order)
 
-    return _get_all_orders(commons)
+    return _get_all_orders_without_invoice(commons)
