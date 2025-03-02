@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { OrdersPage } from '../orders/orders.page';
 
 export interface Item {
     tax_category: string;
@@ -46,6 +45,16 @@ export interface OrderDetailsItem {
     total: number;
 }
 
+export interface Invoice {
+    invoice_number: number;
+    paid: boolean;
+    user_id: string;
+    pk: number;
+    invoice_date: Date;
+    invoice_html: string;
+    total: number;
+}
+
 @Injectable({
     providedIn: 'root',
 })
@@ -60,6 +69,9 @@ export class ApiService {
 
     currentOrderItems: Order[] = [];
     orderItemsSubject: Subject<Order[]> = new Subject<Order[]>();
+
+    currentInvoiceItems: Invoice[] = [];
+    invoiceItemsSubject: Subject<Invoice[]> = new Subject<Invoice[]>();
 
     constructor() {
         this.cartItemsSubject = new Subject();
@@ -125,5 +137,24 @@ export class ApiService {
     getOrderDetails(pk: number): Observable<OrderDetails> {
         const params = new HttpParams().set('order_id', pk);
         return this.http.get<OrderDetails>(`${this.apiRoot}/orders/details`, { params: params });
+    }
+
+    getInvoices(): Observable<Invoice[]> {
+        return this.http.get<Invoice[]>(`${this.apiRoot}/invoices/all`).pipe(
+            map((invoices: Invoice[]) => {
+                this.currentInvoiceItems = invoices;
+                this.invoiceItemsSubject.next(invoices);
+                return invoices;
+            })
+        );
+    }
+
+    downloadInvoice(invoice: Invoice): Observable<Blob> {
+        const params = new HttpParams().set('invoice_number', invoice.invoice_number);
+        return this.http.get(`${this.apiRoot}/invoices`, { params: params, responseType: 'blob' }).pipe(
+            map((data: any) => {
+                return new Blob([data], { type: 'application/pdf' });
+            })
+        );
     }
 }

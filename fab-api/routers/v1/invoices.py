@@ -2,6 +2,7 @@ import datetime
 import os
 from collections import defaultdict
 from io import BytesIO
+from typing import List
 
 from sqlalchemy import func
 from starlette.responses import Response
@@ -41,7 +42,7 @@ def generate_invoice(user_id: str, year: int, month: int, commons: CommonDeps) -
             extract("year", FABOrder.timestamp) == year,
             extract("month", FABOrder.timestamp) == month,
             FABOrder.user_id == user_id,
-            FABOrder.fk_invoice is None,
+            FABOrder.fk_invoice == None,  # noqa
         )
         .order_by(FABOrder.timestamp.asc())
     )
@@ -95,7 +96,9 @@ def generate_invoice(user_id: str, year: int, month: int, commons: CommonDeps) -
     result = templates.get_template(name="invoice.html").render(**data)
 
     # Save the invoice to the database
-    db_invoice = FABInvoice(invoice_number=invoice_number, invoice_date=now, invoice_html=result)
+    db_invoice = FABInvoice(
+        user_id=user_id, invoice_number=invoice_number, invoice_date=now, invoice_html=result, paid=False, total=total
+    )
     commons.db.add(db_invoice)
     commons.db.commit()
     commons.db.refresh(db_invoice)
@@ -124,7 +127,11 @@ def create_invoice_pdf_from_html(html: str) -> BytesIO:
 
 @router.get("/")
 def get_invoice(invoice_number: int, commons: CommonDeps = Depends(common_deps)) -> Response:
-    stmt = select(FABInvoice).where(FABInvoice.invoice_number == invoice_number)
+    stmt = (
+        select(FABInvoice)
+        .where(FABInvoice.invoice_number == invoice_number)
+        .where(FABInvoice.user_id == commons.user_id)
+    )
     result = commons.db.exec(stmt).first()
     f = create_invoice_pdf_from_html(result.invoice_html)
     all_bytes = f.getvalue()
@@ -145,3 +152,10 @@ def generate_invoice_per_year_month_user(
         return Response(all_bytes, headers=headers, media_type="application/pdf")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/all")
+def get_all_invoices(commons: CommonDeps = Depends(common_deps)) -> List[FABInvoice]:
+    stmt = select(FABInvoice).where(FABInvoice.user_id == commons.user_id).order_by(FABInvoice.invoice_date.desc())
+    result = commons.db.exec(stmt)
+    return [r for r in result]

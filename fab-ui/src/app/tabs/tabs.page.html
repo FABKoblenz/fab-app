@@ -15,5 +15,12 @@
             <ion-icon aria-hidden="true" name="reorder-four"></ion-icon>
             <ion-label>Übersicht</ion-label>
         </ion-tab-button>
+
+        @if (keycloak.hasRealmRole('admin')) {
+        <ion-tab-button tab="admin" href="/fab/admin">
+            <ion-icon aria-hidden="true" name="beer"></ion-icon>
+            <ion-label>Admin</ion-label>
+        </ion-tab-button>
+        }
     </ion-tab-bar>
 </ion-tabs>
