@@ -14,7 +14,7 @@
     margin: 2.5cm;
     @bottom-left {
         color: #a9a;
-        content: 'Billard Team FAB Koblenz e.V. | Carl-Zeiss-Straße 2, 56070 Koblenz | billardteam-fab.de \a BANK_NAME | BIC GENODE | IBAN DE68500105178297336485 \a USt-IdNr. DE123456789 │ Steuer-Nr. 07777/33211 │ Registergericht Musterstadt │ HRB 3333 │ 1. Vorsitzender: Elmar Oberlinger';
+        content: 'Billard Team FAB Koblenz e.V. | Carl-Zeiss-Straße 2, 56070 Koblenz | billardteam-fab.de │ 1. Vorsitzender: Elmar Oberlinger';
         font-size: 6pt;
         white-space: pre;
     }
