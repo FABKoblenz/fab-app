@@ -151,7 +151,7 @@ export class ApiService {
 
     downloadInvoice(invoice: Invoice): Observable<Blob> {
         const params = new HttpParams().set('invoice_number', invoice.invoice_number);
-        return this.http.get(`${this.apiRoot}/invoices`, { params: params, responseType: 'blob' }).pipe(
+        return this.http.get(`${this.apiRoot}/invoices/`, { params: params, responseType: 'blob' }).pipe(
             map((data: any) => {
                 return new Blob([data], { type: 'application/pdf' });
             })
