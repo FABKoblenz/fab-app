@@ -49,7 +49,7 @@ def generate_invoice(user_id: str, year: int, month: int, commons: CommonDeps) -
     result = commons.db.exec(stmt)
     all_orders = [r for r in result]
 
-    all_order_details = [get_order_details(order.pk, commons) for order in all_orders]
+    all_order_details = [get_order_details(order.pk, user_id, commons) for order in all_orders]
 
     if len(all_order_details) == 0:
         raise ValueError(f"No orders found for User: {user_id} (Year-Month) {year}-{month}")

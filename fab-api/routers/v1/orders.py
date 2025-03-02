@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
@@ -14,13 +14,16 @@ def _get_orders(commons: CommonDeps = Depends(common_deps)):
     pass
 
 
-def get_order_details(order_id: int, commons: CommonDeps = Depends(common_deps)) -> FABOrderWithItems:
+def get_order_details(
+    order_id: int, user_id: Optional[str] = None, commons: CommonDeps = Depends(common_deps)
+) -> FABOrderWithItems:
+    user_id = user_id if user_id is not None else commons.user_id
     stmt = (
         select(FABOrder, FABOrderItem, FABItem)
         .join(FABOrderItem, FABOrder.pk == FABOrderItem.fk_order)
         .join(FABItem, FABItem.pk == FABOrderItem.fk_item)
         .where(FABOrder.pk == order_id)
-        .where(FABOrder.user_id == commons.user_id)
+        .where(FABOrder.user_id == user_id)
     )
     result = commons.db.exec(stmt)
     user_id = None
@@ -61,7 +64,7 @@ async def get_orders(commons: CommonDeps = Depends(common_deps)) -> List[FABOrde
 
 @router.get("/details")
 async def get_orders_details(order_id: int, commons: CommonDeps = Depends(common_deps)):
-    return get_order_details(order_id, commons)
+    return get_order_details(order_id, commons.user_id, commons)
 
 
 @router.post("/order-cart")
